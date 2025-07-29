@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Satellite Processing Workflow</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals with Subtle Accents -->
+    <!-- Application Structure Plan: The SPA is designed as a top-to-bottom narrative journey. It starts with a high-level introduction, then flows into an interactive diagram of the 'Core Automation Stages'. This process-oriented structure was chosen because the source material describes a workflow; visualizing it directly is the most intuitive way for a user to understand the sequence and relationship between stages. Clicking on a stage reveals detailed information and a relevant visualization in the section below, creating a direct interactive loop. This is more engaging than a static document. Below the workflow, 'Application Domains' are presented as interactive cards, allowing users to explore use-cases that interest them. Finally, the 'Technical Stack' is displayed visually to reinforce the technologies used. This structure guides the user from 'what' and 'how' (the workflow) to 'why' (the applications) and 'with what' (the tech stack), ensuring a comprehensive understanding. -->
+    <!-- Visualization & Content Choices: 
+        - Workflow Diagram: Report Info -> Core Automation Stages. Goal -> Organize/Change. Viz -> Interactive HTML/CSS diagram. Interaction -> On click, the selected stage is highlighted, and detailed content below is updated. Justification -> A visual flowchart is superior to a numbered list for understanding a process. The interaction connects the process step directly to its details, enhancing learning. Method -> HTML/CSS with Tailwind + JS.
+        - Stage Details & Chart: Report Info -> Details of each automation stage. Goal -> Inform/Compare. Viz -> A doughnut chart (Chart.js) and descriptive text. Interaction -> The chart and text dynamically update based on the selected workflow stage. The chart visualizes a conceptual breakdown of effort/complexity for each stage. Justification -> This provides a visual anchor to the text description, making it more engaging. A doughnut chart is simple and effective for showing parts of a whole. Library -> Chart.js.
+        - Application Domains: Report Info -> Key Application Domains. Goal -> Inform/Organize. Viz -> Interactive cards with icons. Interaction -> Hover effects on cards to encourage exploration. Justification -> Cards are a visually appealing and common UI pattern for presenting distinct categories of information.
+        - Technical Stack: Report Info -> Technical Stack. Goal -> Inform. Viz -> Styled list with logos/icons represented by Unicode characters or simple CSS. Justification -> A simple, clean visual representation is sufficient to list the technologies involved. Method -> HTML/CSS with Tailwind.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF8; /* Warm Neutral */
+            color: #4A4A4A;
+        }
+        .active-stage {
+            background-color: #EADDCA; /* Subtle Accent */
+            border-color: #C1B5A3;
+            transform: scale(1.05);
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 350px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+        <!-- Header -->
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-[#3A3F44] mb-2">Automated Satellite Image Processing</h1>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto">An interactive overview of the robust and versatile workflow designed to transform raw satellite data into actionable insights.</p>
+        </header>
+
+        <!-- Core Workflow Section -->
+        <section id="workflow" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-4 text-[#3A3F44]">Core Automation Workflow</h2>
+            <p class="text-center text-gray-600 mb-8 max-w-2xl mx-auto">This workflow is the heart of the automation process. Click on each stage to explore the details and see a conceptual breakdown of its components.</p>
+            
+            <!-- Interactive Workflow Diagram -->
+            <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4">
+                <div id="stage-1" class="workflow-stage border-2 border-gray-300 rounded-lg p-4 w-full md:w-60 text-center cursor-pointer transition-transform duration-300 ease-in-out">
+                    <span class="text-2xl">🧹</span>
+                    <h3 class="font-semibold mt-2">1. Pre-processing & Cleaning</h3>
+                </div>
+                <div class="text-2xl text-gray-400 hidden md:block">→</div>
+                <div id="stage-2" class="workflow-stage border-2 border-gray-300 rounded-lg p-4 w-full md:w-60 text-center cursor-pointer transition-transform duration-300 ease-in-out">
+                    <span class="text-2xl">🤖</span>
+                    <h3 class="font-semibold mt-2">2. ML & Data Analysis</h3>
+                </div>
+                <div class="text-2xl text-gray-400 hidden md:block">→</div>
+                 <div id="stage-3" class="workflow-stage border-2 border-gray-300 rounded-lg p-4 w-full md:w-60 text-center cursor-pointer transition-transform duration-300 ease-in-out">
+                    <span class="text-2xl">🗺️</span>
+                    <h3 class="font-semibold mt-2">3. Zonal Aggregation</h3>
+                </div>
+                <div class="text-2xl text-gray-400 hidden md:block">→</div>
+                <div id="stage-4" class="workflow-stage border-2 border-gray-300 rounded-lg p-4 w-full md:w-60 text-center cursor-pointer transition-transform duration-300 ease-in-out">
+                    <span class="text-2xl">📊</span>
+                    <h3 class="font-semibold mt-2">4. Actionable Output</h3>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dynamic Content Section -->
+        <section id="details" class="bg-white rounded-xl shadow-lg p-6 md:p-8 mb-16 min-h-[450px]">
+             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div id="details-content">
+                    <h3 id="details-title" class="text-2xl font-bold mb-4 text-[#3A3F44]">Select a workflow stage</h3>
+                    <p id="details-text" class="text-gray-700 leading-relaxed">The details for the selected stage will appear here. This section provides an in-depth look at the processes, techniques, and objectives involved at each step of the automated workflow, from initial data cleaning to final output generation.</p>
+                </div>
+                <div class="chart-container">
+                    <canvas id="workflowChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Application Domains Section -->
+        <section id="applications" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-4 text-[#3A3F44]">Key Application Domains</h2>
+            <p class="text-center text-gray-600 mb-8 max-w-2xl mx-auto">The insights generated by this workflow have critical applications across various sectors, enabling data-driven decisions for environmental and resource management.</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+                    <span class="text-3xl">🌾</span>
+                    <h3 class="font-bold text-xl mt-2 mb-2">Agriculture</h3>
+                    <p class="text-gray-600">Crop health monitoring, yield prediction, irrigation management, and land use suitability analysis.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+                    <span class="text-3xl">🌲</span>
+                    <h3 class="font-bold text-xl mt-2 mb-2">Forestry</h3>
+                    <p class="text-gray-600">Deforestation detection, biomass estimation, forest health assessment, and species identification.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+                    <span class="text-3xl">🌊</span>
+                    <h3 class="font-bold text-xl mt-2 mb-2">Disaster Management</h3>
+                    <p class="text-gray-600">Rapid mapping of flood extents, drought severity assessment, and wildfire impact analysis.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+                    <span class="text-3xl">🏞️</span>
+                    <h3 class="font-bold text-xl mt-2 mb-2">Landscape Analysis</h3>
+                    <p class="text-gray-600">Land cover classification, urban growth monitoring, and environmental impact assessment.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Tech Stack Section -->
+        <section id="tech-stack">
+            <h2 class="text-3xl font-bold text-center mb-4 text-[#3A3F44]">Technical Stack</h2>
+            <p class="text-center text-gray-600 mb-8 max-w-2xl mx-auto">This project is powered by a hybrid architecture, combining the scalability of the cloud with a powerful local Python ecosystem for maximum flexibility and performance.</p>
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="font-bold text-xl mb-4 text-[#3A3F44]">☁️ Cloud-Based Processing</h3>
+                        <p class="text-gray-700">Leveraging <span class="font-semibold">Google Earth Engine</span> for scalable, efficient, and rapid analysis of large geospatial datasets directly in the cloud.</p>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-xl mb-4 text-[#3A3F44]">🐍 Local Python Ecosystem</h3>
+                        <ul class="space-y-2 text-gray-700">
+                            <li><span class="font-semibold">Python:</span> Core language for workflow orchestration.</li>
+                            <li><span class="font-semibold">ArcPy:</span> Integration with ArcGIS for geoprocessing tasks.</li>
+                            <li><span class="font-semibold">Rasterio:</span> High-performance raster data manipulation.</li>
+                            <li><span class="font-semibold">Geopandas:</span> Advanced vector data handling and analysis.</li>
+                            <li><span class="font-semibold">Scikit-learn:</span> Machine learning for data analysis pipeline.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const stageData = {
+            'stage-1': {
+                title: '1. Data Pre-processing and Cleaning',
+                text: 'This initial stage is crucial for ensuring data quality. It involves implementing advanced spatial and temporal filtering to remove noise and inconsistencies from raw satellite imagery. Furthermore, efficient cloud removal algorithms are developed and applied to guarantee a pristine, analysis-ready dataset.',
+                chartData: {
+                    labels: ['Spatial Filtering', 'Temporal Filtering', 'Cloud Removal'],
+                    data: [35, 30, 35],
+                    bgColor: ['#D4A5A5', '#A5B4D4', '#A5D4B4']
+                }
+            },
+            'stage-2': {
+                title: '2. Advanced Data Analysis & Machine Learning',
+                text: 'In this stage, we integrate sophisticated machine learning models (like classification, regression, and clustering) to unlock the data\'s potential. These models extract meaningful patterns, identify key features, and derive thematic information from the cleaned datasets, forming the core of the analytical process.',
+                chartData: {
+                    labels: ['Model Training', 'Feature Extraction', 'Pattern Recognition'],
+                    data: [40, 35, 25],
+                    bgColor: ['#E3C16F', '#6FB5E3', '#E36F8B']
+                }
+            },
+            'stage-3': {
+                title: '3. Zonal Aggregation & Statistical Extraction',
+                text: 'This stage focuses on contextualizing the data. It automates the grouping of data values into defined zones, such as administrative boundaries or ecological regions. For each zone, key statistical metrics (mean, median, area statistics, etc.) are extracted to provide localized, comparable insights.',
+                 chartData: {
+                    labels: ['Zone Definition', 'Data Grouping', 'Statistical Analysis'],
+                    data: [25, 45, 30],
+                    bgColor: ['#7BCAB3', '#E0A9A9', '#A9B9E0']
+                }
+            },
+            'stage-4': {
+                title: '4. Actionable Output Generation',
+                text: 'The final stage transforms complex analysis into user-friendly outputs. The processed information is presented in clear, structured table formats. These outputs are tailored for specific needs like land suitability assessments, detailed informational reports, and other domain-specific analyses.',
+                chartData: {
+                    labels: ['Table Formatting', 'Suitability Reports', 'Custom Analysis'],
+                    data: [30, 40, 30],
+                    bgColor: ['#BDB2E5', '#E5D1B2', '#B2E5CF']
+                }
+            }
+        };
+
+        const workflowStages = document.querySelectorAll('.workflow-stage');
+        const detailsTitle = document.getElementById('details-title');
+        const detailsText = document.getElementById('details-text');
+        const chartCanvas = document.getElementById('workflowChart');
+        let myChart;
+
+        function updateDetails(stageId) {
+            const data = stageData[stageId];
+            
+            detailsTitle.innerText = data.title;
+            detailsText.innerText = data.text;
+
+            if (myChart) {
+                myChart.destroy();
+            }
+
+            myChart = new Chart(chartCanvas, {
+                type: 'doughnut',
+                data: {
+                    labels: data.chartData.labels,
+                    datasets: [{
+                        label: 'Conceptual Breakdown',
+                        data: data.chartData.data,
+                        backgroundColor: data.chartData.bgColor,
+                        borderColor: '#FDFBF8',
+                        borderWidth: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#4A4A4A',
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed !== null) {
+                                        label += context.parsed + '%';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    cutout: '60%'
+                }
+            });
+        }
+
+        workflowStages.forEach(stage => {
+            stage.addEventListener('click', () => {
+                workflowStages.forEach(s => s.classList.remove('active-stage'));
+                stage.classList.add('active-stage');
+                updateDetails(stage.id);
+            });
+        });
+
+        // Initialize with the first stage
+        document.addEventListener('DOMContentLoaded', () => {
+            const firstStage = document.getElementById('stage-1');
+            firstStage.classList.add('active-stage');
+            updateDetails('stage-1');
+        });
+
+    </script>
+</body>
+</html>
